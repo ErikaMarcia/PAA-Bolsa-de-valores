@@ -1,0 +1,18 @@
+{
+    "name": "PAA-bolsa-de-valores",
+    "version": "1.0.0",
+    "description": "",
+    "main": "sistema.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "type": "module",
+    "keywords": [
+      "bot",
+      "javascript",
+      "sms",
+      "twilio"
+    ],
+    "author": "Erika, Arthur",
+    "license": "MIT"
+  }
