@@ -6,9 +6,9 @@ pequena base de dados real do mercado imobiliário, que contém os seguintes dad
 - Dividendo: dividendo mensal distribuído por cota.
 
 Com base nessas informações selecionaremos um conjunto de ativos (também chamado de portfólio ou carteira) que maximize o retorno de um investimento e minimize seus riscos. Será considerado:
-- Retorno Efetivo de um Ativo;
-- Retorno Esperado Retorno de um Ativo;
-- Risco de um Ativo;
-- Retorno do Portfólio;
-- Risco do Portfólio;
+- Retorno Efetivo de um Ativo
+- Retorno Esperado Retorno de um Ativo
+- Risco de um Ativo
+- Retorno do Portfólio
+- Risco do Portfólio
 
