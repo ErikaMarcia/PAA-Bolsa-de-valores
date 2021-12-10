@@ -56,22 +56,35 @@ function retornoEsperadoDeUmAtivo(ativo) {
   }
 }
 
-function riscoAtivo(ativo) {
+function riscoAtivo(array) {
   let total = 0;
-  for (const a in ativo) {
+  for (const a in array) {
     total += a;
   }
-  return total / ativo.length;
+  return total / array.length;
 }
 
-function desvioPadrao(ativo) {
-  let risco = riscoAtivo(ativo);
+function desvioPadrao() {
+  let array = montarArrayAtivo("alzr");
+  let risco = riscoAtivo(array);
 
   let variacao = 0;
 
-  for (const a in ativo) {
+  for (const a in array) {
     variacao += (a - risco) ^ 2;
   }
-
-  return variacao / ativo.length;
+  console.log(variacao / array.length);
+  return variacao / array.length;
 }
+
+function montarArrayAtivo(nomeAtivo) {
+  var array = [];
+  for (var i = 0; i < data.length; i++) {
+    if (data[i].ativo == nomeAtivo) {
+      array.push(data[i].preco);
+    }
+  }
+  return array;
+}
+
+desvioPadrao();
