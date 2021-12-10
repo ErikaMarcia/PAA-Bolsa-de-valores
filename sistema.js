@@ -3,88 +3,90 @@ import { default as readCsv } from "./service/readCsv.js";
 const data = readCsv();
 
 function retornoEfetivoDeUmAtivo(ativo) {
-  const precoTotal = data[data.length - 2].preco;
+  let array = montarArrayAtivo(ativo);
 
-  const precoInicial = data[1].preco;
+  let precoTotal = parseFloat(array[array.length - 1]);
+  let precoInicial = parseFloat(array[0]);
+  let somaDividendo = parseFloat(somarDividendo(ativo));
+  let valorFinal = (precoTotal + somaDividendo - precoInicial) / precoInicial;
 
-  if (ativo == "alzr") {
-    let valorFinal = 0;
-
-    valorFinal = (precoTotal + 17.14 - precoInicial) / precoInicial;
-
-    console.log(valorFinal);
-  }
+  return valorFinal.toFixed(4) * 100;
 }
 
 function retornoEsperadoDeUmAtivo(ativo) {
-  if (ativo == "alzr") {
-    let media = 0;
-
-    media =
-      (100.9 +
-        101.91 +
-        103.5 +
-        101.5 +
-        96.6 +
-        93.2 +
-        94 +
-        92.77 +
-        89.81 +
-        91.74 +
-        94.9 +
-        97.8 +
-        98 +
-        98.1 +
-        97.54 +
-        96.99 +
-        103.3 +
-        104.21 +
-        104.37 +
-        105.9 +
-        105.81 +
-        111.78 +
-        119.98 +
-        144.65 +
-        127.5 +
-        122.9 +
-        100.85 +
-        108.27 +
-        116.5) /
-      29;
-
-    console.log(`A média do ativo ${ativo} é ${media.toFixed(2)}`);
+  let media = 0;
+  let soma = 0;
+  let array = montarArrayAtivo(ativo);
+  for (let i = 0; i < array.length; i++) {
+    soma += array[i];
   }
+
+  media = soma / array.length;
+
+  return media.toFixed(2);
 }
 
-function riscoAtivo(array) {
+function riscoAtivo(precos) {
   let total = 0;
-  for (const a in array) {
-    total += a;
+  for (let i = 0; i < precos.length; i++) {
+    total += precos[i];
   }
-  return total / array.length;
+  return total / precos.length;
 }
 
-function desvioPadrao() {
-  let array = montarArrayAtivo("alzr");
-  let risco = riscoAtivo(array);
-
+function desvioPadrao(ativo) {
+  let precos = montarArrayAtivo(ativo);
+  let risco = riscoAtivo(precos);
   let variacao = 0;
 
-  for (const a in array) {
-    variacao += (a - risco) ^ 2;
+  for (let i = 0; i < precos.length; i++) {
+    variacao += (precos[i] - risco) ^ 2;
   }
-  console.log(variacao / array.length);
-  return variacao / array.length;
+  return Math.sqrt(variacao / precos.length);
+}
+
+function teste(ativo) {
+  let precos = montarArrayAtivo(ativo);
+  let mediaPrecos = retornoEsperadoDeUmAtivo(ativo);
+  let desvio = [];
+  for (let i = 0; i < precos.length; i++) {
+    desvio.push(precos[i] - mediaPrecos);
+  }
+
+  let variancia = 0;
+
+  for (let i = 0; i < desvio.length; i++) {
+    variancia += desvio[i] ^ 2;
+  }
+
+  variancia = variancia / mediaPrecos;
+
+  let desvioPadrao = Math.sqrt(variancia);
+
+  console.log(variancia);
+}
+
+function riscoNormalizado(ativo) {
+  console.log(desvioPadrao(ativo) / retornoEsperadoDeUmAtivo(ativo));
 }
 
 function montarArrayAtivo(nomeAtivo) {
   var array = [];
   for (var i = 0; i < data.length; i++) {
     if (data[i].ativo == nomeAtivo) {
-      array.push(data[i].preco);
+      array.push(parseFloat(data[i].preco));
     }
   }
   return array;
 }
+function somarDividendo(nomeAtivo) {
+  let soma = 0;
+  for (var i = 0; i < data.length; i++) {
+    if (data[i].ativo == nomeAtivo) {
+      soma += parseFloat(data[i].dividendo);
+    }
+  }
+  return soma.toFixed(2);
+}
 
-desvioPadrao();
+console.log(desvioPadrao("alzr"));
