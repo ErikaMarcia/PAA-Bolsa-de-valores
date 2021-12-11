@@ -196,8 +196,8 @@ function montarPortifolio() {
 //montarPortifolio();
 console.log(retornoEfetivoDeUmAtivo('alzr'));
 console.log(retornoEsperadoDeUmAtivo('alzr'));
-console.log(desvioPadrao(10000))
-console.log(riscoAtivo('alzr'))
+console.log(desvioPadrao('alzr'))
+console.log(riscoAtivo(montarArrayAtivo('alzr')))
 console.log(somarDividendo('alzr'))
 console.log(riscoNormalizado('alzr'))
 console.log(montarArrayAtivo('alzr'))
