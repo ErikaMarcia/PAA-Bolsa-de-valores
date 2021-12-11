@@ -63,11 +63,21 @@ function teste(ativo) {
 
   let desvioPadrao = Math.sqrt(variancia);
 
-  console.log(variancia);
+  console.log(desvioPadrao);
 }
 
 function riscoNormalizado(ativo) {
-  console.log(desvioPadrao(ativo) / retornoEsperadoDeUmAtivo(ativo));
+  return desvioPadrao(ativo) / retornoEsperadoDeUmAtivo(ativo);
+}
+
+function somarDividendo(nomeAtivo) {
+  let soma = 0;
+  for (var i = 0; i < data.length; i++) {
+    if (data[i].ativo == nomeAtivo) {
+      soma += parseFloat(data[i].dividendo);
+    }
+  }
+  return soma.toFixed(2);
 }
 
 function montarArrayAtivo(nomeAtivo) {
@@ -79,14 +89,3 @@ function montarArrayAtivo(nomeAtivo) {
   }
   return array;
 }
-function somarDividendo(nomeAtivo) {
-  let soma = 0;
-  for (var i = 0; i < data.length; i++) {
-    if (data[i].ativo == nomeAtivo) {
-      soma += parseFloat(data[i].dividendo);
-    }
-  }
-  return soma.toFixed(2);
-}
-
-console.log(desvioPadrao("alzr"));
