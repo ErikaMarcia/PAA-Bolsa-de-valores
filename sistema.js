@@ -167,20 +167,20 @@ function montarPortifolio() {
 
     for (let i = 0; i < num_solucoes; i++) {
       let valor_portifolio = 0,
-        peso_mochila = 0;
+        peso_portfolio = 0;
 
       // Verificar a solucao.
       for (let j = 0; j < num_items; j++) {
         if (i & (1 << j)) {
           valor_portifolio += riscos[j].risco;
-          peso_mochila += riscos[j].porcentagem;
+          peso_portfolio += riscos[j].porcentagem;
         }
       }
 
-      if (peso_mochila <= capacidade) {
+      if (peso_portfolio <= capacidade) {
         if (valor_portifolio > melhor_risco) {
           solucao = i;
-          melhor_peso = peso_mochila;
+          melhor_peso = peso_portfolio;
           melhor_risco = valor_portifolio;
         }
       }
