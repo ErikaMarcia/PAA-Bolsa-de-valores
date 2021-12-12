@@ -3,33 +3,46 @@ import { default as readCsv } from "./service/readCsv.js";
 const data = readCsv();
 
 function retornoEfetivoDeUmAtivo(ativo) {
-  let array = montarArrayAtivo(ativo);
 
-  let precoTotal = parseFloat(array[array.length - 1]);
-  let precoInicial = parseFloat(array[0]);
-  let somaDividendo = parseFloat(somarDividendo(ativo));
-  let valorFinal = (precoTotal + somaDividendo - precoInicial) / precoInicial;
+  try {
+    let array = montarArrayAtivo(ativo);
 
-  return valorFinal.toFixed(4) * 100;
+    let precoTotal = parseFloat(array[array.length - 1]);
+    let precoInicial = parseFloat(array[0]);
+    let somaDividendo = parseFloat(somarDividendo(ativo));
+    let valorFinal = (precoTotal + somaDividendo - precoInicial) / precoInicial;
+
+    return valorFinal.toFixed(4) * 100;
+  } catch (error) {
+    console.error(`O error que ocorreu foi: ${error}`)
+  }
 }
 
 function retornoEsperadoDeUmAtivo(ativo) {
   let media = 0;
   let soma = 0;
   let array = montarArrayAtivo(ativo);
-  for (let i = 0; i < array.length; i++) {
-    soma += array[i];
-  }
+  try {
+    for (let i = 0; i < array.length; i++) {
+      soma += array[i];
+    }
 
-  media = soma / array.length;
+    media = soma / array.length;
+  } catch (error) {
+    console.error(`O error que ocorreu foi: ${error}`)
+  }
 
   return media.toFixed(2);
 }
 
 function riscoAtivo(precos) {
   let total = 0;
-  for (let i = 0; i < precos.length; i++) {
-    total += precos[i];
+  try {
+    for (let i = 0; i < precos.length; i++) {
+      total += precos[i];
+    }
+  } catch (error) {
+    console.error(`O error que ocorreu foi: ${error}`)
   }
   return total / precos.length;
 }
@@ -39,32 +52,48 @@ function desvioPadrao(ativo) {
   let risco = riscoAtivo(precos);
   let variacao = 0;
 
-  for (let i = 0; i < precos.length; i++) {
-    variacao += (precos[i] - risco) ^ 2;
+  try {
+    for (let i = 0; i < precos.length; i++) {
+      variacao += (precos[i] - risco) ^ 2;
+    }
+  } catch (error) {
+    console.error(`O error que ocorreu foi: ${error}`)
   }
   return Math.sqrt(variacao / precos.length);
 }
 
 function riscoNormalizado(ativo) {
-  return desvioPadrao(ativo) / retornoEsperadoDeUmAtivo(ativo);
+  try {
+    return desvioPadrao(ativo) / retornoEsperadoDeUmAtivo(ativo);
+  } catch (error) {
+    console.error(`O error que ocorreu foi: ${error}`)
+  }
 }
 
 function somarDividendo(nomeAtivo) {
   let soma = 0;
-  for (var i = 0; i < data.length; i++) {
-    if (data[i].ativo == nomeAtivo) {
-      soma += parseFloat(data[i].dividendo);
+  try {
+    for (var i = 0; i < data.length; i++) {
+      if (data[i].ativo == nomeAtivo) {
+        soma += parseFloat(data[i].dividendo);
+      }
     }
+  } catch (error) {
+    console.error(`O error que ocorreu foi: ${error}`)
   }
   return soma.toFixed(2);
 }
 
 function montarArrayAtivo(nomeAtivo) {
   var array = [];
-  for (var i = 0; i < data.length; i++) {
-    if (data[i].ativo == nomeAtivo) {
-      array.push(parseFloat(data[i].preco));
+  try {
+    for (var i = 0; i < data.length; i++) {
+      if (data[i].ativo == nomeAtivo) {
+        array.push(parseFloat(data[i].preco));
+      }
     }
+  } catch (error) {
+    console.error(`O error que ocorreu foi: ${error}`)
   }
   return array;
 }
@@ -134,31 +163,37 @@ function montarPortifolio() {
   let num_solucoes = 1024 * 1024 * 32 * 4;
   let solucao = 0;
 
-  for (let i = 0; i < num_solucoes; i++) {
-    let valor_mochila = 0,
-      peso_mochila = 0;
+  try {
 
-    // Verificar a solucao.
-    for (let j = 0; j < num_items; j++) {
-      if (i & (1 << j)) {
-        valor_mochila += riscos[j].risco;
-        peso_mochila += riscos[j].porcentagem;
+    for (let i = 0; i < num_solucoes; i++) {
+      let valor_portifolio = 0,
+        peso_portfolio = 0;
+
+      // Verificar a solucao.
+      for (let j = 0; j < num_items; j++) {
+        if (i & (1 << j)) {
+          valor_portifolio += riscos[j].risco;
+          peso_portfolio += riscos[j].porcentagem;
+        }
+      }
+
+      if (peso_portfolio <= capacidade) {
+        if (valor_portifolio > melhor_risco) {
+          solucao = i;
+          melhor_peso = peso_portfolio;
+          melhor_risco = valor_portifolio;
+        }
       }
     }
-
-    if (peso_mochila <= capacidade) {
-      if (valor_mochila > melhor_risco) {
-        solucao = i;
-        melhor_peso = peso_mochila;
-        melhor_risco = valor_mochila;
-      }
-    }
+  } catch (error) {
+    console.error(`O error que ocorreu foi: ${error}`)
   }
 
-  console.log("peso da mochila: ", melhor_peso.toFixed(2));
-  console.log("risco da mochila: ", (melhor_risco / 100).toFixed(2), "%");
+  console.log("peso do portifolio: ", melhor_peso.toFixed(2));
+  console.log("risco do portifolio: ", (melhor_risco / 100).toFixed(2), "%");
 }
 
+<<<<<<< HEAD
 function melhorPeso() {
   let riscos = montarArrayRiscos();
   let riscosRetorno = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -203,3 +238,14 @@ function melhorPeso() {
   }
   return riscos;
 }
+=======
+//montarPortifolio();
+console.log(retornoEfetivoDeUmAtivo('alzr'));
+console.log(retornoEsperadoDeUmAtivo('alzr'));
+console.log(desvioPadrao('alzr'))
+console.log(riscoAtivo(montarArrayAtivo('alzr')))
+console.log(somarDividendo('alzr'))
+console.log(riscoNormalizado('alzr'))
+console.log(montarArrayAtivo('alzr'))
+montarPortifolio()
+>>>>>>> 4d9bad24acb982f72da30fe4844f29e10cd6c5d6
