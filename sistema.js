@@ -126,7 +126,7 @@ function montarArrayRiscos() {
 }
 
 function montarPortifolio() {
-  let riscos = montarArrayRiscos();
+  let riscos = melhorPeso();
   let capacidade = 15;
   let melhor_risco = 0,
     melhor_peso = 0;
@@ -159,45 +159,47 @@ function montarPortifolio() {
   console.log("risco da mochila: ", (melhor_risco / 100).toFixed(2), "%");
 }
 
-montarPortifolio();
-// //definindo capacidade maxima do portifolio
-// const capacidade = 10;
-// //definindo variaveis
-// let contadorPortifolio = 0;
-// let ativos = [];
-// let max;
-// let valorPortifolio;
+function melhorPeso() {
+  let riscos = montarArrayRiscos();
+  let riscosRetorno = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  let porcentagem = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  let qtde;
+  let peso = 10;
+  let contador = 0;
 
-// //funcao para remover item do portifolio para fazer proxima verificacao
-// var removeByAttr = function (arr, attr, value) {
-//   var i = arr.length;
-//   while (i--) {
-//     if (
-//       arr[i] &&
-//       arr[i].hasOwnProperty(attr) &&
-//       arguments.length > 2 &&
-//       arr[i][attr] === value
-//     ) {
-//       arr.splice(i, 1);
-//     }
-//   }
-// };
-// do {
-//   //encontra o item com maior valor
-//   max = riscos.reduce(function (anterior, atual) {
-//     return anterior.risco > atual.risco ? anterior : atual;
-//   });
-//   //se ainda tiver espaco na mochila ele inclui o elemento com peso maximo
-//   if (max.peso + contadorPortifolio <= capacidade) {
-//     ativos.push(max);
-//     contadorPortifolio += max.peso; //ele aumenta o valor do contador da mochila
-//     valorPortifolio += max.risco; //ele aumenta o valor da mochila
-//     removeByAttr(riscos, "id", max.id); //remove o item com maior valor da relacao inicial de itens
-//   } else {
-//     //caso o item com peso maximo nao couber na mochila ele apenas remove esse item da relacao inicial para a proxima verificacao
-//     removeByAttr(riscos, "id", max.id);
-//   }
-// } while (capacidade > contadorPortifolio && riscos.length > 0); //roda o loop ate que a capacidade esgote ou ate que a relacao inicial de itens esteja vazia
+  let soma = 0;
+  let anterior = 0;
+  let intermediario = 0;
+  while (peso != 0) {
+    qtde = peso / porcentagem[contador];
+    if (qtde != 0) {
+      riscosRetorno[contador] = porcentagem[contador];
+      peso--;
+    }
+    for (let i = 0; i < riscosRetorno.length; i++) {
+      soma += riscosRetorno[i];
+    }
+    if (soma >= 10) {
+      peso = 0;
+    } else {
+      soma = 0;
+    }
+    if (peso == 10) {
+      for (let i = 0; i < 10; i++) {
+        intermediario += riscos[i].risco * riscosRetorno[i];
+      }
+      if (anterior == 0) {
+        anterior = intermediario;
+      }
+      if (anterior > intermediario) {
+        anterior = intermediario;
+      }
+    }
 
-// console.log(ativos);
-// console.log(valorPortifolio);
+    contador++;
+  }
+  for (let i = 0; i < 10; i++) {
+    riscos[i].porcentagem = riscosRetorno[i];
+  }
+  return riscos;
+}
