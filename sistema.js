@@ -1,4 +1,5 @@
 import { default as readCsv } from "./service/readCsv.js";
+import readline from 'readline'
 
 const data = readCsv();
 
@@ -59,12 +60,12 @@ function desvioPadrao(ativo) {
   } catch (error) {
     console.error(`O error que ocorreu foi: ${error}`)
   }
-  return Math.sqrt(variacao / precos.length);
+  return (Math.sqrt(variacao / precos.length)).toFixed(2);
 }
 
 function riscoNormalizado(ativo) {
   try {
-    return desvioPadrao(ativo) / retornoEsperadoDeUmAtivo(ativo);
+    return (desvioPadrao(ativo) / retornoEsperadoDeUmAtivo(ativo)).toFixed(5);
   } catch (error) {
     console.error(`O error que ocorreu foi: ${error}`)
   }
@@ -189,11 +190,10 @@ function montarPortifolio() {
     console.error(`O error que ocorreu foi: ${error}`)
   }
 
-  console.log("peso do portifolio: ", melhor_peso.toFixed(2));
-  console.log("risco do portifolio: ", (melhor_risco / 100).toFixed(2), "%");
+  console.log("Peso do portifolio: ", melhor_peso.toFixed(2));
+  console.log("Risco do portifolio: ", (melhor_risco / 100).toFixed(2), "%");
 }
 
-<<<<<<< HEAD
 function melhorPeso() {
   let riscos = montarArrayRiscos();
   let riscosRetorno = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -205,47 +205,77 @@ function melhorPeso() {
   let soma = 0;
   let anterior = 0;
   let intermediario = 0;
-  while (peso != 0) {
-    qtde = peso / porcentagem[contador];
-    if (qtde != 0) {
-      riscosRetorno[contador] = porcentagem[contador];
-      peso--;
-    }
-    for (let i = 0; i < riscosRetorno.length; i++) {
-      soma += riscosRetorno[i];
-    }
-    if (soma >= 10) {
-      peso = 0;
-    } else {
-      soma = 0;
-    }
-    if (peso == 10) {
-      for (let i = 0; i < 10; i++) {
-        intermediario += riscos[i].risco * riscosRetorno[i];
+  try {
+    while (peso != 0) {
+      qtde = peso / porcentagem[contador];
+      if (qtde != 0) {
+        riscosRetorno[contador] = porcentagem[contador];
+        peso--;
       }
-      if (anterior == 0) {
-        anterior = intermediario;
+      for (let i = 0; i < riscosRetorno.length; i++) {
+        soma += riscosRetorno[i];
       }
-      if (anterior > intermediario) {
-        anterior = intermediario;
+      if (soma >= 10) {
+        peso = 0;
+      } else {
+        soma = 0;
       }
-    }
+      if (peso == 10) {
+        for (let i = 0; i < 10; i++) {
+          intermediario += riscos[i].risco * riscosRetorno[i];
+        }
+        if (anterior == 0) {
+          anterior = intermediario;
+        }
+        if (anterior > intermediario) {
+          anterior = intermediario;
+        }
+      }
 
-    contador++;
-  }
-  for (let i = 0; i < 10; i++) {
-    riscos[i].porcentagem = riscosRetorno[i];
+      contador++;
+    }
+    for (let i = 0; i < 10; i++) {
+      riscos[i].porcentagem = riscosRetorno[i];
+    }
+  } catch (error) {
+    console.error(`O error que ocorreu foi: ${error}`)
   }
   return riscos;
 }
-=======
-//montarPortifolio();
-console.log(retornoEfetivoDeUmAtivo('alzr'));
-console.log(retornoEsperadoDeUmAtivo('alzr'));
-console.log(desvioPadrao('alzr'))
-console.log(riscoAtivo(montarArrayAtivo('alzr')))
-console.log(somarDividendo('alzr'))
-console.log(riscoNormalizado('alzr'))
-console.log(montarArrayAtivo('alzr'))
-montarPortifolio()
->>>>>>> 4d9bad24acb982f72da30fe4844f29e10cd6c5d6
+
+function menu() {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+
+  console.log("### Hey bem-vindo ao programa da bolsa de valores ###")
+
+  try {
+    rl.question("Qual o seu nome? ", function (nome) {
+      rl.question("Digite qual ativo você deseja saber as suas informações? ", function (nomeAtivo) {
+        console.log(`Hey ${nome}, o ativo ${nomeAtivo}, que buscou possui estas informações:
+      \n Todos os dividendos ${somarDividendo(nomeAtivo)}
+       \n O retorno efetivo do seu ativo é de ${retornoEfetivoDeUmAtivo(nomeAtivo)}
+        \n O retorno esperado desse ativo é de ${retornoEsperadoDeUmAtivo(nomeAtivo)}
+         \n O risco do seu ativo é ${riscoAtivo(montarArrayAtivo(nomeAtivo))}
+          \n O desvio padrão do seu ativo é ${desvioPadrao(nomeAtivo)}
+           \n O risco normalizado do seu ativo é ${riscoNormalizado(nomeAtivo)} \n`);
+           console.log('O seu portifólio é \n ')
+            console.log(montarPortifolio(), melhorPeso())
+        rl.close();
+      });
+    });
+
+    rl.on("close", function () {
+      console.log('\nBYE BYE  !!!');
+      process.exit(0);
+    });
+
+  } catch (error) {
+    console.error(`O error que ocorreu foi: ${error}`)
+  }
+}
+
+menu()
+
