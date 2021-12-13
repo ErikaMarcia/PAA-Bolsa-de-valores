@@ -14,4 +14,6 @@ Com base nessas informações selecionaremos um conjunto de ativos (também cham
 
 ## Comandos necessários
 
-Para conseguir rodar no terminal do VS Code necessário rodar o comando node sistema.js
+Para conseguir rodar no terminal do VS Code necessário rodar o comando "node sistema.js"
+
+Não é ncessário ter uma biblioteca selecionada, mas é recomendado ter o node.js instalado na sua máqina.
