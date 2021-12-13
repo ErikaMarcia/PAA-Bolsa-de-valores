@@ -12,3 +12,6 @@ Com base nessas informações selecionaremos um conjunto de ativos (também cham
 - Retorno do Portfólio
 - Risco do Portfólio
 
+## Comandos necessários
+
+Para conseguir rodar no terminal do VS Code necessário rodar o comando node sistema.js
